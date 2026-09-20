@@ -1,0 +1,258 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f3ff;
+  color: #17152b;
+}
+
+.app {
+  min-height: 100vh;
+}
+
+/* NAVBAR */
+.navbar {
+  height: 70px;
+  background: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8%;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+}
+
+.logo {
+  font-size: 26px;
+  font-weight: bold;
+  color: #5b4bdb;
+}
+
+.nav-links {
+  display: flex;
+  gap: 35px;
+}
+
+.nav-links span {
+  color: #555;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.nav-links span:hover {
+  color: #5b4bdb;
+}
+
+/* HERO */
+.hero {
+  min-height: 650px;
+  padding: 70px 8%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-text {
+  max-width: 550px;
+}
+
+.tag {
+  color: #5b4bdb;
+  font-size: 14px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  margin-bottom: 18px;
+}
+
+.hero h1 {
+  font-size: 58px;
+  line-height: 1.05;
+  margin-bottom: 25px;
+}
+
+.hero h1 span {
+  color: #5b4bdb;
+}
+
+.description {
+  color: #666;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+/* CERTIFICATE */
+.certificate-card {
+  background: white;
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 20px 50px rgba(91, 75, 219, 0.18);
+}
+
+.certificate-border {
+  min-height: 390px;
+  border: 4px solid #5b4bdb;
+  padding: 45px 30px;
+  text-align: center;
+  position: relative;
+}
+
+.small-title {
+  color: #5b4bdb;
+  font-size: 14px;
+  letter-spacing: 2px;
+  font-weight: bold;
+}
+
+.certificate-border h2 {
+  font-size: 42px;
+  margin: 15px 0 25px;
+}
+
+.presented {
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.certificate-border h3 {
+  font-size: 32px;
+  color: #5b4bdb;
+  margin-bottom: 18px;
+}
+
+.course {
+  color: #555;
+  font-size: 16px;
+}
+
+.course strong {
+  color: #17152b;
+}
+
+.certificate-bottom {
+  position: absolute;
+  bottom: 25px;
+  left: 30px;
+  right: 30px;
+  display: flex;
+  justify-content: space-between;
+  color: #777;
+}
+
+/* GENERATOR */
+.generator {
+  background: white;
+  padding: 80px 8%;
+}
+
+.generator-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.generator-header h2 {
+  font-size: 38px;
+  margin-bottom: 12px;
+}
+
+.generator-header p:last-child {
+  color: #777;
+}
+
+.form-card {
+  max-width: 700px;
+  margin: auto;
+  padding: 40px;
+  background: #f8f7ff;
+  border-radius: 20px;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+}
+
+.input-group {
+  margin-bottom: 22px;
+}
+
+.input-group label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #d5d1ed;
+  border-radius: 10px;
+  font-size: 16px;
+  outline: none;
+  background: white;
+}
+
+.input-group input:focus {
+  border-color: #5b4bdb;
+}
+
+.form-card button {
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 10px;
+  background: #5b4bdb;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.form-card button:hover {
+  background: #4938c7;
+}
+
+/* FOOTER */
+footer {
+  background: #17152b;
+  color: #bbb;
+  text-align: center;
+  padding: 25px;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding: 50px 6%;
+  }
+
+  .hero h1 {
+    font-size: 42px;
+  }
+
+  .navbar {
+    padding: 0 6%;
+  }
+}
+
+@media (max-width: 600px) {
+  .nav-links {
+    display: none;
+  }
+
+  .certificate-border {
+    min-height: 350px;
+  }
+
+  .certificate-border h2 {
+    font-size: 30px;
+  }
+
+  .certificate-border h3 {
+    font-size: 25px;
+  }
+
+  .form-card {
+    padding: 25px;
+  }
+}
