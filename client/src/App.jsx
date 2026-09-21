@@ -1,4 +1,5 @@
 import { useState } from "react";
+import * as XLSX from "xlsx";
 import "./App.css";
 
 function App() {
@@ -6,174 +7,238 @@ function App() {
   const [course, setCourse] = useState("");
   const [date, setDate] = useState("");
 
-  const handleGenerate = async () => {
+  // Excel Upload
+  const handleExcelUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+
+      const workbook = XLSX.read(data, {
+        type: "array",
+      });
+
+      const sheetName = workbook.SheetNames[0];
+
+      const sheet = workbook.Sheets[sheetName];
+
+      const rows = XLSX.utils.sheet_to_json(sheet);
+
+      if (rows.length > 0) {
+        const firstRow = rows[0];
+
+        setName(
+          firstRow.Name ||
+            firstRow.name ||
+            firstRow.NAME ||
+            ""
+        );
+
+        setCourse(
+          firstRow.Course ||
+            firstRow.course ||
+            firstRow.COURSE ||
+            ""
+        );
+
+        setDate(
+          firstRow.Date ||
+            firstRow.date ||
+            firstRow.DATE ||
+            ""
+        );
+      }
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  // Generate / Print Certificate
+  const handleGenerateCertificate = () => {
     if (!name || !course || !date) {
-      alert("Please fill all fields");
+      alert("Please enter Student Name, Course and Date.");
       return;
     }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/generate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          course,
-          date,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        alert(data.message || "Something went wrong");
-        return;
-      }
-
-      alert("Certificate generated successfully!");
-
-      window.open(data.downloadUrl, "_blank");
-    } catch (error) {
-      console.error(error);
-      alert("Backend connection failed");
-    }
+    window.print();
   };
 
   return (
     <div className="app">
 
-      <nav className="navbar">
-        <div className="logo">CertiFlow</div>
+      {/* HEADER */}
+      <header className="header">
 
-        <div className="nav-links">
-          <span>Home</span>
-          <span>Generate</span>
-          <span>About</span>
-        </div>
-      </nav>
+        <div>
+          <h1>CertiFlow</h1>
 
-      <section className="hero">
-
-        <div className="hero-text">
-          <p className="tag">CERTIFICATE GENERATOR</p>
-
-          <h1>
-            Create Beautiful
-            <br />
-            Certificates <span>Instantly.</span>
-          </h1>
-
-          <p className="description">
-            Generate professional certificates quickly and easily
-            for your events, courses and achievements.
+          <p>
+            Bulk Certificate Generator
           </p>
         </div>
 
-        <div className="certificate-card">
+        <span className="badge">
+          Certificate Studio
+        </span>
 
-          <div className="certificate-border">
+      </header>
 
-            <p className="small-title">
-              CERTIFICATE OF ACHIEVEMENT
-            </p>
+      {/* MAIN */}
+      <main className="container">
 
-            <h2>Certificate</h2>
+        {/* DETAILS PANEL */}
+        <section className="panel">
 
-            <p className="presented">
-              This certificate is proudly presented to
-            </p>
+          <h2>Student Details</h2>
 
-            <h3>
-              {name || "Your Name"}
-            </h3>
+          {/* Excel */}
+          <label>
+            Upload Excel File
+          </label>
 
-            <p className="course">
-              for successfully completing{" "}
-              <strong>
-                {course || "Your Course"}
-              </strong>
-            </p>
+          <input
+            type="file"
+            accept=".xlsx,.xls"
+            onChange={handleExcelUpload}
+          />
 
-            <div className="certificate-bottom">
-              <span>{date || "DD-MM-YYYY"}</span>
-              <span>CertiFlow</span>
+          <p className="hint">
+            Excel columns: Name, Course, Date
+          </p>
+
+          {/* Name */}
+          <label>
+            Student Name
+          </label>
+
+          <input
+            type="text"
+            placeholder="Enter student name"
+            value={name}
+            onChange={(e) =>
+              setName(e.target.value)
+            }
+          />
+
+          {/* Course */}
+          <label>
+            Course
+          </label>
+
+          <input
+            type="text"
+            placeholder="Enter course name"
+            value={course}
+            onChange={(e) =>
+              setCourse(e.target.value)
+            }
+          />
+
+          {/* Date */}
+          <label>
+            Date
+          </label>
+
+          <input
+            type="date"
+            value={date}
+            onChange={(e) =>
+              setDate(e.target.value)
+            }
+          />
+
+          {/* Generate Button */}
+          <button
+            className="download-btn"
+            onClick={handleGenerateCertificate}
+          >
+            Generate Certificate
+          </button>
+
+        </section>
+
+        {/* CERTIFICATE */}
+        <section className="certificate-area">
+
+          <h2 className="preview-title">
+            Certificate Preview
+          </h2>
+
+          <div
+            className="certificate"
+            id="certificate"
+          >
+
+            <div className="certificate-border">
+
+              <p className="brand">
+                CERTIFLOW
+              </p>
+
+              <h1>
+                CERTIFICATE
+              </h1>
+
+              <h3>
+                OF ACHIEVEMENT
+              </h3>
+
+              <p className="presented">
+                This certificate is proudly presented to
+              </p>
+
+              <h2 className="student-name">
+                {name || "Student Name"}
+              </h2>
+
+              <p className="completed">
+                for successfully completing
+              </p>
+
+              <h2 className="course-name">
+                {course || "Course Name"}
+              </h2>
+
+              <div className="certificate-footer">
+
+                <div>
+                  <span>
+                    {date || "DD / MM / YYYY"}
+                  </span>
+
+                  <small>
+                    DATE
+                  </small>
+                </div>
+
+                <div>
+                  <span>
+                    CertiFlow
+                  </span>
+
+                  <small>
+                    ISSUED BY
+                  </small>
+                </div>
+
+              </div>
+
             </div>
 
           </div>
 
-        </div>
-
-      </section>
-
-      <section className="generator">
-
-        <div className="generator-header">
-
-          <p className="tag">CREATE CERTIFICATE</p>
-
-          <h2>Enter Certificate Details</h2>
-
-          <p>
-            Fill in the details below to generate your certificate.
+          <p className="print-info">
+            Click <b>Generate Certificate</b> to print
+            or save your certificate as PDF.
           </p>
 
-        </div>
+        </section>
 
-        <div className="form-card">
-
-          <div className="input-group">
-
-            <label>Recipient Name</label>
-
-            <input
-              type="text"
-              placeholder="Enter recipient name"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
-
-          </div>
-
-          <div className="input-group">
-
-            <label>Course / Event</label>
-
-            <input
-              type="text"
-              placeholder="Enter course or event"
-              value={course}
-              onChange={(e) => setCourse(e.target.value)}
-            />
-
-          </div>
-
-          <div className="input-group">
-
-            <label>Date</label>
-
-            <input
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-
-          </div>
-
-          <button onClick={handleGenerate}>
-            Generate Certificate
-          </button>
-
-        </div>
-
-      </section>
-
-      <footer>
-        <p>
-          © 2026 CertiFlow — Bulk Certificate Generator
-        </p>
-      </footer>
+      </main>
 
     </div>
   );
